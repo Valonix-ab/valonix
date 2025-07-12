@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Valonix</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -36,44 +36,111 @@
       margin-top: 1rem;
       color: #555;
     }
-    .cta-button {
+
+    .input-container {
       margin-top: 2rem;
+      max-width: 600px;
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+    #userInput:focus {
+      border-color: #111;
+    }
+
+    .send-button {
       background: #111;
       color: white;
       border: none;
-      padding: 1rem 2rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    .cta-button:hover {
-      background: #333;
-    }
-    .chatbot-placeholder {
-      margin-top: 4rem;
-      width: 100%;
-      max-width: 600px;
-      height: 400px;
-      border: 2px dashed #aaa;
+      padding: 0.75rem 1.5rem;
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #888;
-      font-style: italic;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .send-button:hover {
+      background-color: #333;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    #responseBox {
+      margin-top: 2rem;
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+      color: #222;
+      min-height: 80px;
+      white-space: pre-wrap;
+      text-align: left;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>VALONIX</h1>
-    <p>Smarta AI-lösningar för framtidens företag</p>
-    <button class="cta-button">Kontakta oss</button>
+    <p>Smart AI solutions for the companies of tomorrow</p>
   </header>
 
-  <div class="chatbot-placeholder">
-    [ Här kommer din AI-chattbot att visas ]
+  <div class="input-container">
+    <input
+      type="text"
+      id="userInput"
+      placeholder="Type your message..."
+      autocomplete="off"
+    />
+    <button class="send-button" onclick="sendMessage()">Send</button>
   </div>
+
+  <div id="responseBox"></div>
+
+  <script>
+    async function sendMessage() {
+      const inputElem = document.getElementById("userInput");
+      const responseBox = document.getElementById("responseBox");
+      const userInput = inputElem.value.trim();
+
+      if (!userInput) return; // Do nothing if input is empty
+
+      responseBox.innerText = "Thinking...";
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userInput }),
+        });
+
+        if (!res.ok) {
+          responseBox.innerText = "Error: Failed to get response.";
+          return;
+        }
+
+        const data = await res.json();
+        responseBox.innerText = data.response || "No response received.";
+      } catch (error) {
+        responseBox.innerText = "Error: " + error.message;
+      }
+
+      inputElem.value = "";
+      inputElem.focus();
+    }
+  </script>
 </body>
 </html>
