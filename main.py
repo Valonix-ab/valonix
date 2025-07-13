@@ -10,10 +10,9 @@ import os
 # Load environment variables (like OPENAI_API_KEY)
 load_dotenv()
 
-# Create FastAPI app
 app = FastAPI()
 
-# Enable CORS for widget embedding
+# CORS: så widgeten kan bäddas in på andra sidor
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,27 +21,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve index.html at root
+# Serve frontend-filer
 @app.get("/")
 def serve_index():
     return FileResponse("index.html")
 
-# ✅ Serve widget.js directly at /widget.js
+@app.get("/widget.html")
+def serve_widget_html():
+    return FileResponse("widget.html")
+
 @app.get("/widget.js")
-def serve_widget():
+def serve_widget_js():
     return FileResponse("widget.js", media_type="application/javascript")
 
-# ✅ Optional: mount all other assets in current directory (CSS, images, etc.)
+# Mount static files om du har bilder, CSS, fonts osv i roten
 app.mount("/static", StaticFiles(directory="."), name="static")
 
-# Chat input format
+# Datamodell för inkommande meddelanden
 class ChatRequest(BaseModel):
     message: str
 
-# OpenAI client
+# OpenAI-klienten (GPT-4o)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# POST endpoint for chat messages
 @app.post("/chat")
 async def chat(chat_request: ChatRequest):
     try:

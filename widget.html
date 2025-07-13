@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Valonix Widget</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      padding: 1rem;
+      color: #111;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .chat-container {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .send-button {
+      background: #111;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .response-box {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      min-height: 80px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h2>Hej! 👋</h2>
+  <div class="chat-container">
+    <input type="text" id="userInput" placeholder="Skriv ett meddelande..." />
+    <button class="send-button" onclick="sendMessage()">Skicka</button>
+  </div>
+
+  <div class="response-box" id="responseBox"></div>
+
+  <script>
+    async function sendMessage() {
+      const inputElem = document.getElementById("userInput");
+      const responseBox = document.getElementById("responseBox");
+      const message = inputElem.value.trim();
+      if (!message) return;
+
+      responseBox.innerText = "Tänker...";
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        responseBox.innerText = data.response || "Inget svar mottaget.";
+      } catch (err) {
+        responseBox.innerText = "Fel: " + err.message;
+      }
+
+      inputElem.value = "";
+      inputElem.focus();
+    }
+  </script>
+</body>
+</html>
