@@ -19,22 +19,32 @@
 
   let iframeOpen = false;
   const iframe = document.createElement("iframe");
-  iframe.src = "/widget.html"; // ✅ Ladda bara widgetens chattinnehåll
+  iframe.src = "/widget.html";
   iframe.setAttribute("loading", "lazy");
   iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
-  Object.assign(iframe.style, {
-    position: "fixed",
-    bottom: "70px",
-    right: "20px",
-    width: "370px",
-    height: "500px",
-    border: "1px solid #ccc",
-    borderRadius: "12px",
-    boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-    zIndex: "9998",
-    display: "none",
-    backgroundColor: "#fff",
-  });
+
+  // Responsiv storlek baserat på skärm
+  function updateIframeSize() {
+    const isMobile = window.innerWidth <= 600;
+    Object.assign(iframe.style, {
+      position: "fixed",
+      bottom: "70px",
+      right: "20px",
+      width: isMobile ? "90%" : "600px",
+      height: isMobile ? "500px" : "700px",
+      border: "1px solid #ccc",
+      borderRadius: "12px",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+      zIndex: "9998",
+      display: "none",
+      backgroundColor: "#fff",
+    });
+  }
+
+  // Init och på resize
+  updateIframeSize();
+  window.addEventListener("resize", updateIframeSize);
+
   document.body.appendChild(iframe);
 
   button.addEventListener("click", () => {
