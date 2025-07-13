@@ -6,67 +6,91 @@
   <title>Valonix Widget</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background: #fff;
       padding: 1rem;
+      color: #111;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      height: 100vh;
     }
 
-    .chat-header {
+    h2 {
       font-size: 1.25rem;
       font-weight: 600;
-      text-align: center;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
 
-    .chat-window {
+    .suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .suggestions button {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .suggestions button:hover {
+      background: #f1f1f1;
+    }
+
+    .chat-box {
       flex: 1;
       overflow-y: auto;
-      background: #f5f5f5;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+      padding-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
 
-    .bubble {
+    .message {
       max-width: 80%;
       padding: 0.75rem 1rem;
-      border-radius: 20px;
-      margin-bottom: 0.75rem;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      word-wrap: break-word;
+      border-radius: 16px;
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
 
     .bot {
-      background-color: #eaeaea;
-      color: #111;
+      background-color: #f2f2f2;
       align-self: flex-start;
-      border-bottom-left-radius: 4px;
+      color: #000;
     }
 
     .user {
       background-color: #111;
       color: #fff;
       align-self: flex-end;
-      border-bottom-right-radius: 4px;
     }
 
-    .input-area {
+    .chat-container {
       display: flex;
       gap: 0.5rem;
-      margin-top: 1rem;
+      align-items: center;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eee;
     }
 
     #userInput {
       flex: 1;
       padding: 0.6rem 1rem;
       border: 1.5px solid #ccc;
-      border-radius: 20px;
+      border-radius: 10px;
       font-size: 1rem;
       outline: none;
     }
@@ -75,57 +99,50 @@
       background: #111;
       color: white;
       border: none;
-      padding: 0.6rem 1.25rem;
-      border-radius: 20px;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
-    }
-
-    @media screen and (max-width: 480px) {
-      .bubble { font-size: 0.9rem; }
-      .chat-window { padding: 0.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="chat-header">Valonix Assistent</div>
+  <h2>Hej! 👋 Hur kan jag hjälpa dig?</h2>
 
-  <div class="chat-window" id="chatWindow">
-    <div class="bubble bot">
-      Hej! Jag är din virtuella assistent. Jag hjälper dig med frågor om produkter, öppettider och mer!<br><br>
-      🕐 <strong>Öppettider:</strong><br>
-      Mån–Fre: 08:00–20:00<br>
-      Lör: 08:00–17:00<br>
-      Sön: Stängt<br><br>
-      Vad vill du veta idag?
-    </div>
+  <div class="suggestions" id="suggestions">
+    <button onclick="sendQuick('Visa mig sängar under 3000 kr')">Visa mig sängar under 3000 kr</button>
+    <button onclick="sendQuick('Har ni skrivbord för hemmakontor?')">Har ni skrivbord för hemmakontor?</button>
+    <button onclick="sendQuick('Vad rekommenderar ni för utemöbler?')">Vad rekommenderar ni för utemöbler?</button>
   </div>
 
-  <div class="input-area">
+  <div class="chat-box" id="chatBox"></div>
+
+  <div class="chat-container">
     <input type="text" id="userInput" placeholder="Skriv ett meddelande..." />
     <button class="send-button" onclick="sendMessage()">Skicka</button>
   </div>
 
   <script>
+    const chatBox = document.getElementById("chatBox");
+
+    function appendMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = `message ${type}`;
+      div.innerText = text;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
     async function sendMessage() {
       const input = document.getElementById("userInput");
-      const chatWindow = document.getElementById("chatWindow");
       const message = input.value.trim();
       if (!message) return;
 
-      // Användarens meddelande
-      const userBubble = document.createElement("div");
-      userBubble.className = "bubble user";
-      userBubble.innerText = message;
-      chatWindow.appendChild(userBubble);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      appendMessage(message, "user");
+      input.value = "";
+      input.focus();
 
-      // Svar placeholder
-      const botBubble = document.createElement("div");
-      botBubble.className = "bubble bot";
-      botBubble.innerText = "Tänker...";
-      chatWindow.appendChild(botBubble);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+      appendMessage("Tänker...", "bot");
 
       try {
         const res = await fetch("/chat", {
@@ -134,13 +151,19 @@
           body: JSON.stringify({ message })
         });
         const data = await res.json();
-        botBubble.innerText = data.response || "Inget svar mottaget.";
-      } catch (err) {
-        botBubble.innerText = "Fel: " + err.message;
-      }
 
-      input.value = "";
-      input.focus();
+        // Replace the "Tänker..." with actual response
+        const botMsg = chatBox.querySelector(".message.bot:last-child");
+        botMsg.innerText = data.response || "Inget svar mottaget.";
+      } catch (err) {
+        const botMsg = chatBox.querySelector(".message.bot:last-child");
+        botMsg.innerText = "Fel: " + err.message;
+      }
+    }
+
+    function sendQuick(msg) {
+      document.getElementById("userInput").value = msg;
+      sendMessage();
     }
   </script>
 </body>
