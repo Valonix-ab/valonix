@@ -17,6 +17,11 @@
   });
   document.body.appendChild(button);
 
+  let iframeOpen = false;
+  const iframe = document.createElement("iframe");
+  iframe.src = "/widget-content.html"; // 🟢 NY fil för widgetinnehåll
+  iframe.setAttribute("loading", "lazy");
+  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
   Object.assign(iframe.style, {
     position: "fixed",
     bottom: "70px",
