@@ -106,6 +106,33 @@
       font-weight: 600;
       cursor: pointer;
     }
+
+    /* Tillåt bilder att visas snyggt i svaren */
+    .bubble img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 6px;
+    }
+
+    .product-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .product-card h3 {
+      margin: 5px 0;
+    }
+
+    .product-card a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+
+    .product-card a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -130,7 +157,11 @@
     function appendMessage(text, sender) {
       const div = document.createElement("div");
       div.className = `bubble ${sender}`;
-      div.innerText = text;
+      if (sender === "ai") {
+        div.innerHTML = text; // 🟢 Använd HTML för AI-svar
+      } else {
+        div.innerText = text; // Använd text för användarens input
+      }
       responseBox.appendChild(div);
       responseBox.scrollTop = responseBox.scrollHeight;
     }
