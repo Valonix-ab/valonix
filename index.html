@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valonix</title>
+  <title>Valonix Assistent</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
     * {
@@ -11,120 +11,169 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
-      color: #222;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
+      background: #fff;
+      color: #111;
       padding: 2rem;
+      line-height: 1.6;
     }
-    header {
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .subtext {
+      font-size: 1rem;
+      color: #555;
+      background-color: #f5f5f5;
+      padding: 1rem;
+      border-radius: 12px;
       margin-bottom: 2rem;
     }
-    h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      color: #111;
+
+    .suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
-    p {
-      font-size: 1.2rem;
-      margin-top: 1rem;
-      color: #555;
+
+    .suggestions button {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 12px;
+      font-size: 1rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-    .input-container {
-      margin-top: 2rem;
-      max-width: 600px;
-      width: 100%;
+
+    .suggestions button:hover {
+      background-color: #f0f0f0;
+    }
+
+    .chat-container {
       display: flex;
       gap: 0.5rem;
-      justify-content: center;
+      align-items: center;
     }
+
     #userInput {
       flex: 1;
       padding: 0.75rem 1rem;
       border: 1.5px solid #ccc;
       border-radius: 12px;
       font-size: 1rem;
-      transition: border-color 0.3s ease;
       outline: none;
     }
-    #userInput:focus {
-      border-color: #111;
-    }
+
     .send-button {
       background: #111;
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1.25rem;
       border-radius: 12px;
-      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .send-button:hover {
-      background-color: #333;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-    }
-    #responseBox {
+
+    .response-box {
       margin-top: 2rem;
-      max-width: 600px;
-      width: 100%;
-      background: #fff;
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-      color: #222;
-      min-height: 80px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      min-height: 100px;
       white-space: pre-wrap;
-      text-align: left;
+    }
+
+    .footer-note {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 1.5rem;
+    }
+
+    .footer-note a {
+      color: #222;
+      font-weight: 600;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>VALONIX</h1>
-    <p>Smart AI solutions for the companies of tomorrow</p>
-  </header>
+  <div class="container">
+    <h1>Hej Erjon!</h1>
+    <h2>På vilket sätt kan jag hjälpa till idag?</h2>
+    <div class="subtext">
+      Har du en fråga om mode? Behöver du bra tips om sportkläder? Det finns mycket vi kan prata om.
+    </div>
 
-  <div class="input-container">
-    <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off" />
-    <button class="send-button" onclick="sendMessage()">Send</button>
+    <div class="suggestions">
+      <button onclick="sendQuick('Visa mig snygga herrshorts för sommaren.')">Visa mig snygga herrshorts för sommaren.</button>
+      <button onclick="sendQuick('Letar efter boots som funkar på sommaren')">Letar efter boots som funkar på sommaren</button>
+      <button onclick="sendQuick('Vad ska jag ha på mig för att förnya min jobbgarderob?')">Vad ska jag ha på mig för att förnya min jobbgarderob?</button>
+    </div>
+
+    <div class="chat-container">
+      <input type="text" id="userInput" placeholder="Skriv in meddelande..." />
+      <button class="send-button" onclick="sendMessage()">Skicka</button>
+    </div>
+
+    <div class="response-box" id="responseBox"></div>
+
+    <div class="footer-note">
+      Jag är i betaversion, så jag lär mig fortfarande! Ta reda på hur jag fungerar i vår
+      <a href="#">Vanliga frågor</a>.
+    </div>
   </div>
-
-  <div id="responseBox"></div>
 
   <script>
     async function sendMessage() {
       const inputElem = document.getElementById("userInput");
       const responseBox = document.getElementById("responseBox");
-      const userInput = inputElem.value.trim();
-      if (!userInput) return;
-      responseBox.innerText = "Thinking...";
+      const message = inputElem.value.trim();
+      if (!message) return;
+
+      responseBox.innerText = "Tänker...";
       try {
         const res = await fetch("/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: userInput }),
+          body: JSON.stringify({ message })
         });
         const data = await res.json();
-        responseBox.innerText = data.response || "No response received.";
-      } catch (error) {
-        responseBox.innerText = "Error: " + error.message;
+        responseBox.innerText = data.response || "Inget svar mottaget.";
+      } catch (err) {
+        responseBox.innerText = "Fel: " + err.message;
       }
+
       inputElem.value = "";
       inputElem.focus();
     }
+
+    function sendQuick(msg) {
+      document.getElementById("userInput").value = msg;
+      sendMessage();
+    }
   </script>
 
-  <!-- ✅ Load the external floating widget -->
-  <script src="widget.js"></script>
+  <!-- Optional: Load floating widget -->
+  <script src="/widget.js"></script>
 </body>
 </html>

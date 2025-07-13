@@ -27,7 +27,12 @@ app.add_middleware(
 def serve_index():
     return FileResponse("index.html")
 
-# Serve widget.js and any other static files
+# ✅ Serve widget.js directly at /widget.js
+@app.get("/widget.js")
+def serve_widget():
+    return FileResponse("widget.js", media_type="application/javascript")
+
+# ✅ Optional: mount all other assets in current directory (CSS, images, etc.)
 app.mount("/static", StaticFiles(directory="."), name="static")
 
 # Chat input format
