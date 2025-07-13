@@ -6,7 +6,86 @@
   <title>Valonix</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
   <style>
-    /* Your existing styles here... */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #f0f0f0, #dcdcdc);
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    header {
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #111;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      color: #555;
+    }
+    .input-container {
+      margin-top: 2rem;
+      max-width: 600px;
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    #userInput {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+    #userInput:focus {
+      border-color: #111;
+    }
+    .send-button {
+      background: #111;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .send-button:hover {
+      background-color: #333;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+    #responseBox {
+      margin-top: 2rem;
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+      color: #222;
+      min-height: 80px;
+      white-space: pre-wrap;
+      text-align: left;
+    }
   </style>
 </head>
 <body>
@@ -45,252 +124,7 @@
     }
   </script>
 
-  <!-- ✅ HERE IS THE EMBEDDED CHAT WIDGET CODE -->
-  <script>
-    // Add widget styles
-    const style = document.createElement("style");
-    style.innerHTML = `
-      #valonix-widget-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #111;
-        color: white;
-        border: none;
-        padding: 12px 16px;
-        border-radius: 50px;
-        font-weight: 600;
-        cursor: pointer;
-        z-index: 9999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      }
-      #valonix-widget-box {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 300px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        display: none;
-        flex-direction: column;
-        padding: 16px;
-        z-index: 9998;
-      }
-      #valonix-widget-box textarea {
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        resize: none;
-        margin-top: 8px;
-      }
-      #valonix-send {
-        margin-top: 10px;
-        background: #111;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      #valonix-response {
-        margin-top: 10px;
-        font-size: 14px;
-        white-space: pre-wrap;
-        color: #333;
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Add button and widget to DOM
-    const button = document.createElement("button");
-    button.id = "valonix-widget-button";
-    button.innerText = "Chat";
-    const widget = document.createElement("div");
-    widget.id = "valonix-widget-box";
-    widget.innerHTML = `
-      <div><strong>Ask Valonix</strong></div>
-      <textarea id="valonix-input" rows="3" placeholder="Ask me something..."></textarea>
-      <button id="valonix-send">Send</button>
-      <div id="valonix-response"></div>
-    `;
-    document.body.appendChild(button);
-    document.body.appendChild(widget);
-
-    // Toggle widget on button click
-    button.addEventListener("click", () => {
-      widget.style.display = widget.style.display === "none" ? "flex" : "none";
-    });
-
-    // Handle chat logic
-    document.getElementById("valonix-send").addEventListener("click", async () => {
-      const input = document.getElementById("valonix-input");
-      const response = document.getElementById("valonix-response");
-      const message = input.value.trim();
-      if (!message) return;
-      response.innerText = "Thinking...";
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message }),
-        });
-        const data = await res.json();
-        response.innerText = data.response || "No response.";
-      } catch (err) {
-        response.innerText = "Error: " + err.message;
-      }
-      input.value = "";
-    });
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valonix</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-  <style>
-    /* Your existing styles here... */
-  </style>
-</head>
-<body>
-  <header>
-    <h1>VALONIX</h1>
-    <p>Smart AI solutions for the companies of tomorrow</p>
-  </header>
-
-  <div class="input-container">
-    <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off" />
-    <button class="send-button" onclick="sendMessage()">Send</button>
-  </div>
-
-  <div id="responseBox"></div>
-
-  <script>
-    async function sendMessage() {
-      const inputElem = document.getElementById("userInput");
-      const responseBox = document.getElementById("responseBox");
-      const userInput = inputElem.value.trim();
-      if (!userInput) return;
-      responseBox.innerText = "Thinking...";
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: userInput }),
-        });
-        const data = await res.json();
-        responseBox.innerText = data.response || "No response received.";
-      } catch (error) {
-        responseBox.innerText = "Error: " + error.message;
-      }
-      inputElem.value = "";
-      inputElem.focus();
-    }
-  </script>
-
-  <!-- ✅ HERE IS THE EMBEDDED CHAT WIDGET CODE -->
-  <script>
-    // Add widget styles
-    const style = document.createElement("style");
-    style.innerHTML = `
-      #valonix-widget-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #111;
-        color: white;
-        border: none;
-        padding: 12px 16px;
-        border-radius: 50px;
-        font-weight: 600;
-        cursor: pointer;
-        z-index: 9999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      }
-      #valonix-widget-box {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 300px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        display: none;
-        flex-direction: column;
-        padding: 16px;
-        z-index: 9998;
-      }
-      #valonix-widget-box textarea {
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        resize: none;
-        margin-top: 8px;
-      }
-      #valonix-send {
-        margin-top: 10px;
-        background: #111;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      #valonix-response {
-        margin-top: 10px;
-        font-size: 14px;
-        white-space: pre-wrap;
-        color: #333;
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Add button and widget to DOM
-    const button = document.createElement("button");
-    button.id = "valonix-widget-button";
-    button.innerText = "Chat";
-    const widget = document.createElement("div");
-    widget.id = "valonix-widget-box";
-    widget.innerHTML = `
-      <div><strong>Ask Valonix</strong></div>
-      <textarea id="valonix-input" rows="3" placeholder="Ask me something..."></textarea>
-      <button id="valonix-send">Send</button>
-      <div id="valonix-response"></div>
-    `;
-    document.body.appendChild(button);
-    document.body.appendChild(widget);
-
-    // Toggle widget on button click
-    button.addEventListener("click", () => {
-      widget.style.display = widget.style.display === "none" ? "flex" : "none";
-    });
-
-    // Handle chat logic
-    document.getElementById("valonix-send").addEventListener("click", async () => {
-      const input = document.getElementById("valonix-input");
-      const response = document.getElementById("valonix-response");
-      const message = input.value.trim();
-      if (!message) return;
-      response.innerText = "Thinking...";
-      try {
-        const res = await fetch("/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message }),
-        });
-        const data = await res.json();
-        response.innerText = data.response || "No response.";
-      } catch (err) {
-        response.innerText = "Error: " + err.message;
-      }
-      input.value = "";
-    });
-  </script>
+  <!-- ✅ Load the external floating widget -->
+  <script src="widget.js"></script>
 </body>
 </html>
