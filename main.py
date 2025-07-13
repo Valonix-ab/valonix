@@ -79,7 +79,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 async def chat(chat_request: ChatRequest):
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
