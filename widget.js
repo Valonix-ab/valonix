@@ -6,57 +6,36 @@
     bottom: "20px",
     right: "20px",
     zIndex: "9999",
-    padding: "14px 20px",
+    padding: "12px 18px",
     backgroundColor: "#111",
     color: "#fff",
     border: "none",
     borderRadius: "30px",
     cursor: "pointer",
     fontSize: "1rem",
-    fontWeight: "600",
-    boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
-    transition: "all 0.3s ease",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
   });
   document.body.appendChild(button);
 
-  let iframeOpen = false;
+  let open = false;
   const iframe = document.createElement("iframe");
-  iframe.src = "/"; // if same origin
-  iframe.setAttribute("loading", "lazy");
-  iframe.setAttribute("title", "Valonix Assistent");
-  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
-
+  iframe.src = "index.html";
   Object.assign(iframe.style, {
     position: "fixed",
-    bottom: "80px",
+    bottom: "70px",
     right: "20px",
-    width: "420px",
+    width: "400px",
     height: "600px",
-    border: "1px solid #ccc",
+    border: "none",
     borderRadius: "16px",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+    boxShadow: "0 6px 20px rgba(0,0,0,0.2)",
     zIndex: "9998",
-    display: "none",
-    backgroundColor: "#fff",
-    transition: "all 0.3s ease",
+    display: "none"
   });
-
   document.body.appendChild(iframe);
 
   button.addEventListener("click", () => {
-    iframeOpen = !iframeOpen;
-    iframe.style.display = iframeOpen ? "block" : "none";
-  });
-
-  // OPTIONAL: Close iframe when clicking outside
-  document.addEventListener("click", (e) => {
-    if (
-      iframeOpen &&
-      !iframe.contains(e.target) &&
-      !button.contains(e.target)
-    ) {
-      iframe.style.display = "none";
-      iframeOpen = false;
-    }
+    open = !open;
+    iframe.style.display = open ? "block" : "none";
   });
 })();
