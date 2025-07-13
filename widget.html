@@ -17,73 +17,20 @@
       background: #fff;
       padding: 1rem;
       color: #111;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
     h2 {
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 1rem;
-    }
-
-    .suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .suggestions button {
-      padding: 0.5rem 1rem;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      background: #fff;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .suggestions button:hover {
-      background: #f1f1f1;
-    }
-
-    .chat-box {
-      flex: 1;
-      overflow-y: auto;
-      padding-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .message {
-      max-width: 80%;
-      padding: 0.75rem 1rem;
-      border-radius: 16px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-
-    .bot {
-      background-color: #f2f2f2;
-      align-self: flex-start;
-      color: #000;
-    }
-
-    .user {
-      background-color: #111;
-      color: #fff;
-      align-self: flex-end;
+      text-align: center;
     }
 
     .chat-container {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      padding-top: 0.75rem;
-      border-top: 1px solid #eee;
+      margin-top: 1rem;
     }
 
     #userInput {
@@ -104,18 +51,44 @@
       font-weight: 600;
       cursor: pointer;
     }
+
+    .response-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      min-height: 80px;
+      font-size: 0.85rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .bot-message {
+      background-color: #f0f0f0;
+      align-self: flex-start;
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 85%;
+    }
+
+    .user-message {
+      background-color: #111;
+      color: white;
+      align-self: flex-end;
+      padding: 10px 14px;
+      border-radius: 12px;
+      max-width: 85%;
+    }
   </style>
 </head>
 <body>
-  <h2>Hej! 👋 Hur kan jag hjälpa dig?</h2>
+  <h2 id="chatTitle">Valonix Assistent 🤖</h2>
 
-  <div class="suggestions" id="suggestions">
-    <button onclick="sendQuick('Visa mig sängar under 3000 kr')">Visa mig sängar under 3000 kr</button>
-    <button onclick="sendQuick('Har ni skrivbord för hemmakontor?')">Har ni skrivbord för hemmakontor?</button>
-    <button onclick="sendQuick('Vad rekommenderar ni för utemöbler?')">Vad rekommenderar ni för utemöbler?</button>
-  </div>
-
-  <div class="chat-box" id="chatBox"></div>
+  <div class="response-box" id="responseBox"></div>
 
   <div class="chat-container">
     <input type="text" id="userInput" placeholder="Skriv ett meddelande..." />
@@ -123,26 +96,36 @@
   </div>
 
   <script>
-    const chatBox = document.getElementById("chatBox");
-
-    function appendMessage(text, type) {
-      const div = document.createElement("div");
-      div.className = `message ${type}`;
-      div.innerText = text;
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+    // Visa första AI-hälsningen
+    window.addEventListener("DOMContentLoaded", () => {
+      const responseBox = document.getElementById("responseBox");
+      const botMessage = document.createElement("div");
+      botMessage.className = "bot-message";
+      botMessage.innerText = "Hej! 👋 Hur kan jag hjälpa dig?";
+      responseBox.appendChild(botMessage);
+    });
 
     async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const message = input.value.trim();
+      const inputElem = document.getElementById("userInput");
+      const responseBox = document.getElementById("responseBox");
+      const message = inputElem.value.trim();
       if (!message) return;
 
-      appendMessage(message, "user");
-      input.value = "";
-      input.focus();
+      // Visa användarens meddelande
+      const userMsg = document.createElement("div");
+      userMsg.className = "user-message";
+      userMsg.innerText = message;
+      responseBox.appendChild(userMsg);
 
-      appendMessage("Tänker...", "bot");
+      inputElem.value = "";
+      inputElem.focus();
+
+      // Visa att AI:n tänker
+      const loadingMsg = document.createElement("div");
+      loadingMsg.className = "bot-message";
+      loadingMsg.innerText = "Tänker...";
+      responseBox.appendChild(loadingMsg);
+      responseBox.scrollTop = responseBox.scrollHeight;
 
       try {
         const res = await fetch("/chat", {
@@ -151,19 +134,11 @@
           body: JSON.stringify({ message })
         });
         const data = await res.json();
-
-        // Replace the "Tänker..." with actual response
-        const botMsg = chatBox.querySelector(".message.bot:last-child");
-        botMsg.innerText = data.response || "Inget svar mottaget.";
+        loadingMsg.innerText = data.response || "Inget svar mottaget.";
+        responseBox.scrollTop = responseBox.scrollHeight;
       } catch (err) {
-        const botMsg = chatBox.querySelector(".message.bot:last-child");
-        botMsg.innerText = "Fel: " + err.message;
+        loadingMsg.innerText = "Fel: " + err.message;
       }
-    }
-
-    function sendQuick(msg) {
-      document.getElementById("userInput").value = msg;
-      sendMessage();
     }
   </script>
 </body>
