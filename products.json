@@ -1,37 +1,11 @@
 [
   {
-    "namn": "TARDRUP Kontinentalmadrass",
+    "namn": "TYSSA PC60",
     "kategori": "Säng",
-    "pris": "4 999 kr",
-    "beskrivning": "Lyxig kontinentalsäng med memory foam för optimal komfort och stöd.",
-    "url": "https://www.jysk.se/sovrum/sangar/kontinentalsangar/tardrup"
-  },
-  {
-    "namn": "VEDDE Skrivbord",
-    "kategori": "Kontor",
-    "pris": "999 kr",
-    "beskrivning": "Modernt skrivbord med låda och svart metallunderrede, perfekt för hemmakontoret.",
-    "url": "https://www.jysk.se/kontor/skrivbord/vedde"
-  },
-  {
-    "namn": "GUNNAR Stol",
-    "kategori": "Stol",
-    "pris": "349 kr",
-    "beskrivning": "Bekväm köksstol med stoppad sits och stilren trädesign.",
-    "url": "https://www.jysk.se/matrum/stolar/gunnar"
-  },
-  {
-    "namn": "KRONBORG Handduk 70x140",
-    "kategori": "Badrum",
-    "pris": "129 kr",
-    "beskrivning": "Mjuk, absorberande badhandduk i 100% bomull. Perfekt för vardagslyx.",
-    "url": "https://www.jysk.se/badrum/handdukar/kronborg-70x140"
-  },
-  {
-    "namn": "FAVRBO Soffa 3-sits",
-    "kategori": "Vardagsrum",
-    "pris": "3 999 kr",
-    "beskrivning": "Elegant 3-sits soffa i grått tyg med bekväm dyna och skandinavisk design.",
-    "url": "https://www.jysk.se/vardagsrum/soffor/3-sits/favrbo"
+    "beskrivning": "Kontinentalsäng 160x200cm TYSSA PC60 svart-08 HR",
+    "pris": "2900",
+    "lager": 25,
+    "url": "https://jysk.se/sovrum/kontinentalsangar/kontinentalsang-160x200cm-tyssa-pc60-svart-08-hr",
+    "bild": "https://cdn3.jysk.com/getimage/wd3.medium/252017"
   }
 ]

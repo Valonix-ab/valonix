@@ -50,7 +50,12 @@ with open("products.json", "r", encoding="utf-8") as f:
 def format_product_knowledge(products):
     lines = []
     for p in products:
-        lines.append(f"- {p['namn']} ({p['kategori']}): {p['beskrivning']} Pris: {p['pris']}. Länk: {p['url']}")
+        lines.append(
+            f"""- {p['namn']} ({p['kategori']}): {p['beskrivning']} 
+  Pris: {p['pris']} SEK
+  Länk: {p['url']}
+  Bild: {p.get('bild', 'Ingen bild')}"""
+        )
     return "\n".join(lines)
 
 product_knowledge = format_product_knowledge(products)
