@@ -15,22 +15,77 @@
     body {
       font-family: 'Inter', sans-serif;
       background: #fff;
-      padding: 1rem;
       color: #111;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
     }
 
     h2 {
       font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       text-align: center;
+    }
+
+    .preview-questions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .preview-questions button {
+      background: #eee;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .response-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fff;
+      margin-bottom: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    .bubble {
+      max-width: 75%;
+      padding: 0.6rem 0.9rem;
+      border-radius: 16px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .ai {
+      background: #f1f1f1;
+      align-self: flex-start;
+      border-top-left-radius: 0;
+    }
+
+    .user {
+      background: #111;
+      color: #fff;
+      align-self: flex-end;
+      border-top-right-radius: 0;
     }
 
     .chat-container {
       display: flex;
       gap: 0.5rem;
       align-items: center;
-      margin-top: 1rem;
     }
 
     #userInput {
@@ -38,7 +93,7 @@
       padding: 0.6rem 1rem;
       border: 1.5px solid #ccc;
       border-radius: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       outline: none;
     }
 
@@ -51,42 +106,16 @@
       font-weight: 600;
       cursor: pointer;
     }
-
-    .response-box {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 10px;
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      min-height: 80px;
-      font-size: 0.85rem;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .bot-message {
-      background-color: #f0f0f0;
-      align-self: flex-start;
-      padding: 10px 14px;
-      border-radius: 12px;
-      max-width: 85%;
-    }
-
-    .user-message {
-      background-color: #111;
-      color: white;
-      align-self: flex-end;
-      padding: 10px 14px;
-      border-radius: 12px;
-      max-width: 85%;
-    }
   </style>
 </head>
 <body>
-  <h2 id="chatTitle">Valonix Assistent 🤖</h2>
+  <h2>Valonix Assistent 🤖</h2>
+
+  <div class="preview-questions">
+    <button onclick="sendPreset('Vad har ni för öppettider?')">Öppettider</button>
+    <button onclick="sendPreset('Hur returnerar jag en vara?')">Returpolicy</button>
+    <button onclick="sendPreset('Har ni studentrabatt?')">Studentrabatt</button>
+  </div>
 
   <div class="response-box" id="responseBox"></div>
 
@@ -96,36 +125,30 @@
   </div>
 
   <script>
-    // Visa första AI-hälsningen
+    const responseBox = document.getElementById("responseBox");
+
+    function appendMessage(text, sender) {
+      const div = document.createElement("div");
+      div.className = `bubble ${sender}`;
+      div.innerText = text;
+      responseBox.appendChild(div);
+      responseBox.scrollTop = responseBox.scrollHeight;
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
-      const responseBox = document.getElementById("responseBox");
-      const botMessage = document.createElement("div");
-      botMessage.className = "bot-message";
-      botMessage.innerText = "Hej! 👋 Hur kan jag hjälpa dig?";
-      responseBox.appendChild(botMessage);
+      appendMessage("Hej! 👋 Hur kan jag hjälpa dig?", "ai");
     });
 
     async function sendMessage() {
       const inputElem = document.getElementById("userInput");
-      const responseBox = document.getElementById("responseBox");
       const message = inputElem.value.trim();
       if (!message) return;
 
-      // Visa användarens meddelande
-      const userMsg = document.createElement("div");
-      userMsg.className = "user-message";
-      userMsg.innerText = message;
-      responseBox.appendChild(userMsg);
+      appendMessage(message, "user");
+      appendMessage("Tänker...", "ai");
 
       inputElem.value = "";
       inputElem.focus();
-
-      // Visa att AI:n tänker
-      const loadingMsg = document.createElement("div");
-      loadingMsg.className = "bot-message";
-      loadingMsg.innerText = "Tänker...";
-      responseBox.appendChild(loadingMsg);
-      responseBox.scrollTop = responseBox.scrollHeight;
 
       try {
         const res = await fetch("/chat", {
@@ -134,11 +157,17 @@
           body: JSON.stringify({ message })
         });
         const data = await res.json();
-        loadingMsg.innerText = data.response || "Inget svar mottaget.";
-        responseBox.scrollTop = responseBox.scrollHeight;
+        const lastBubble = responseBox.querySelector(".bubble.ai:last-of-type");
+        if (lastBubble) lastBubble.remove(); // ta bort "Tänker..."
+        appendMessage(data.response || "Inget svar mottaget.", "ai");
       } catch (err) {
-        loadingMsg.innerText = "Fel: " + err.message;
+        appendMessage("Fel: " + err.message, "ai");
       }
+    }
+
+    function sendPreset(text) {
+      document.getElementById("userInput").value = text;
+      sendMessage();
     }
   </script>
 </body>
