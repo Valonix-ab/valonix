@@ -107,25 +107,35 @@
       cursor: pointer;
     }
 
-    /* Tillåt bilder att visas snyggt i svaren */
-    .bubble img {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 6px;
+    /* Kompakt produktkort */
+    .product-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 8px;
+      background: #f9f9f9;
     }
 
-    .product-card {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-      background: #fff;
+    .product-card img {
+      width: 60px;
+      height: auto;
+      border-radius: 6px;
     }
 
     .product-card h3 {
-      margin: 5px 0;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .product-card p {
+      margin: 2px 0;
+      font-size: 0.75rem;
     }
 
     .product-card a {
+      font-size: 0.75rem;
       color: #0077cc;
       text-decoration: none;
     }
@@ -158,9 +168,9 @@
       const div = document.createElement("div");
       div.className = `bubble ${sender}`;
       if (sender === "ai") {
-        div.innerHTML = text; // 🟢 Använd HTML för AI-svar
+        div.innerHTML = text;
       } else {
-        div.innerText = text; // Använd text för användarens input
+        div.innerText = text;
       }
       responseBox.appendChild(div);
       responseBox.scrollTop = responseBox.scrollHeight;
@@ -189,7 +199,7 @@
         });
         const data = await res.json();
         const lastBubble = responseBox.querySelector(".bubble.ai:last-of-type");
-        if (lastBubble) lastBubble.remove(); // ta bort "Tänker..."
+        if (lastBubble) lastBubble.remove();
         appendMessage(data.response || "Inget svar mottaget.", "ai");
       } catch (err) {
         appendMessage("Fel: " + err.message, "ai");
