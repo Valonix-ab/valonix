@@ -7,11 +7,13 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
+# Load environment variables (like OPENAI_API_KEY)
 load_dotenv()
 
+# Create FastAPI app
 app = FastAPI()
 
-# Enable CORS
+# Enable CORS for widget embedding
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,27 +22,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static files (optional, but useful)
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# Serve index.html
+# Serve index.html at root
 @app.get("/")
 def serve_index():
     return FileResponse("index.html")
 
-# Serve widget.js (for embedding the widget)
-@app.get("/widget.js")
-def serve_widget():
-    return FileResponse("widget.js", media_type="application/javascript")
+# Serve widget.js and any other static files
+app.mount("/static", StaticFiles(directory="."), name="static")
 
-# Define input format
+# Chat input format
 class ChatRequest(BaseModel):
     message: str
 
-# Setup OpenAI
+# OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Handle chat
+# POST endpoint for chat messages
 @app.post("/chat")
 async def chat(chat_request: ChatRequest):
     try:
