@@ -36,7 +36,6 @@
       margin-top: 1rem;
       color: #555;
     }
-
     .input-container {
       margin-top: 2rem;
       max-width: 600px;
@@ -45,7 +44,6 @@
       gap: 0.5rem;
       justify-content: center;
     }
-
     #userInput {
       flex: 1;
       padding: 0.75rem 1rem;
@@ -58,7 +56,6 @@
     #userInput:focus {
       border-color: #111;
     }
-
     .send-button {
       background: #111;
       color: white;
@@ -75,7 +72,6 @@
       background-color: #333;
       box-shadow: 0 6px 12px rgba(0,0,0,0.25);
     }
-
     #responseBox {
       margin-top: 2rem;
       max-width: 600px;
@@ -116,12 +112,12 @@
       const responseBox = document.getElementById("responseBox");
       const userInput = inputElem.value.trim();
 
-      if (!userInput) return; // Do nothing if input is empty
+      if (!userInput) return;
 
       responseBox.innerText = "Thinking...";
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/chat", {
+        const res = await fetch("/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: userInput }),
