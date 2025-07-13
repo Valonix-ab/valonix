@@ -42,25 +42,28 @@ app.mount("/static", StaticFiles(directory="."), name="static")
 class ChatRequest(BaseModel):
     message: str
 
-# 🟩 Läs in produktdata från products.json
+# Läs produktdata
 with open("products.json", "r", encoding="utf-8") as f:
     products = json.load(f)
 
-# Format produktdata till en promptvänlig text
+# Format produktdata till AI-vänlig text
 def format_product_knowledge(products):
     lines = []
     for p in products:
-        lines.append(
-            f"""- {p['namn']} ({p['kategori']}): {p['beskrivning']} 
-  Pris: {p['pris']} SEK
-  Länk: {p['url']}
-  Bild: {p.get('bild', 'Ingen bild')}"""
-        )
+        lines.append(f"""
+<div class="product-card">
+  <img src="{p['bild']}" alt="{p['namn']}" />
+  <h3>{p['namn']}</h3>
+  <p>{p['beskrivning']}</p>
+  <p><strong>Pris:</strong> {p['pris']} SEK</p>
+  <a href="{p['url']}" target="_blank">Visa produkt</a>
+</div>
+        """)
     return "\n".join(lines)
 
 product_knowledge = format_product_knowledge(products)
 
-# 🟦 Extra info som öppettider, kundtjänst mm
+# Extra info (öppettider, kundtjänst osv)
 business_info = """
 Öppettider (generella):
 - Vardagar: 10:00–19:00
@@ -89,14 +92,19 @@ async def chat(chat_request: ChatRequest):
                 {
                     "role": "system",
                     "content": f"""Du är en AI-assistent för JYSK Sverige.
-Du ska ge professionella svar på frågor om:
-- Produkter (se lista nedan)
-- Öppettider
-- Butiksinformation
-- Leveransalternativ
-- Kundtjänst
 
-Produktinformation:
+När du rekommenderar en produkt, använd följande HTML-format så att det visas snyggt i en chattwidget:
+
+<div class="product-card">
+  <img src="[BILDLÄNK]" alt="[NAMN]" />
+  <h3>[NAMN]</h3>
+  <p>[BESKRIVNING]</p>
+  <p><strong>Pris:</strong> [PRIS] SEK</p>
+  <a href="[LÄNK]" target="_blank">Visa produkt</a>
+</div>
+
+Svar ska vara korta, vänliga och professionella. Här är produkterna du kan använda:
+
 {product_knowledge}
 
 Allmän företagsinformation:
