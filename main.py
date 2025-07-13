@@ -1,42 +1,36 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from openai import OpenAI
-import os
 from dotenv import load_dotenv
+import os
 
-# Load environment variables
 load_dotenv()
 
 app = FastAPI()
 
-# Allow frontend to communicate with backend
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to your frontend domain in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# HTML templates
-templates = Jinja2Templates(directory="templates")
+# Serve index.html from root directory
+@app.get("/")
+def serve_index():
+    return FileResponse("index.html")
 
-# OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-# Data model
+# Define input format
 class ChatRequest(BaseModel):
     message: str
 
-# Root endpoint to prevent 404 on render.com
-@app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+# Setup OpenAI
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Chat endpoint
 @app.post("/chat")
 async def chat(chat_request: ChatRequest):
     try:
