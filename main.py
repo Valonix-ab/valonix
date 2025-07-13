@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -35,9 +34,6 @@ def serve_widget_html():
 def serve_widget_js():
     return FileResponse("widget.js", media_type="application/javascript")
 
-# Statisk mapp
-app.mount("/static", StaticFiles(directory="."), name="static")
-
 # Inkommande data
 class ChatRequest(BaseModel):
     message: str
@@ -46,7 +42,7 @@ class ChatRequest(BaseModel):
 with open("products.json", "r", encoding="utf-8") as f:
     products = json.load(f)
 
-# Format produktdata till AI-vänlig text
+# Format produktdata till AI-vänlig HTML
 def format_product_knowledge(products):
     lines = []
     for p in products:
@@ -80,7 +76,7 @@ Butiksinformation:
 - Vi erbjuder både hemleverans och avhämtning i butik.
 """
 
-# OpenAI klient
+# OpenAI-klient
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.post("/chat")
@@ -103,14 +99,20 @@ När du rekommenderar en produkt, använd följande HTML-format så att det visa
   <a href="[LÄNK]" target="_blank">Visa produkt</a>
 </div>
 
-Svar ska vara korta, vänliga och professionella. Här är produkterna du kan använda:
+⚠️ Viktigt:
+- Använd **äkta HTML** – ingen markdown, inga kodblock (inga ```).
+- Undvik att escape:a HTML (använd < och > direkt).
+- Ingen extra text som "Här är koden:" – returnera HTML direkt.
 
+Svaren ska vara korta, vänliga och professionella.
+
+Tillgängliga produkter:
 {product_knowledge}
 
 Allmän företagsinformation:
 {business_info}
 
-Om du inte vet något, säg ärligt att du inte har tillgång till den informationen.
+Om du inte vet svaret – säg det istället för att gissa.
 """
                 },
                 {"role": "user", "content": chat_request.message}
