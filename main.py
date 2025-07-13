@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -19,10 +20,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve index.html from root directory
+# Serve static files (optional, but useful)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Serve index.html
 @app.get("/")
 def serve_index():
     return FileResponse("index.html")
+
+# Serve widget.js (for embedding the widget)
+@app.get("/widget.js")
+def serve_widget():
+    return FileResponse("widget.js", media_type="application/javascript")
 
 # Define input format
 class ChatRequest(BaseModel):
@@ -31,6 +40,7 @@ class ChatRequest(BaseModel):
 # Setup OpenAI
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# Handle chat
 @app.post("/chat")
 async def chat(chat_request: ChatRequest):
     try:
