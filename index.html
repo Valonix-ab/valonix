@@ -14,7 +14,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #fff;
+      background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
       color: #111;
       padding: 2rem;
       line-height: 1.6;
@@ -23,6 +23,10 @@
     .container {
       max-width: 600px;
       margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     }
 
     h1 {
@@ -117,7 +121,7 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="mainContent">
     <h1>Hej Erjon!</h1>
     <h2>På vilket sätt kan jag hjälpa till idag?</h2>
     <div class="subtext">
@@ -138,12 +142,19 @@
     <div class="response-box" id="responseBox"></div>
 
     <div class="footer-note">
-      Jag är i betaversion, så jag lär mig fortfarande! Ta reda på hur jag fungerar i vår
+      Jag är i betaversion, så jag lär mig fortfarande! Läs mer i våra
       <a href="#">Vanliga frågor</a>.
     </div>
   </div>
 
   <script>
+    // Dölj innehållet utanför widget om sidan körs i en iframe
+    if (window !== window.parent) {
+      document.body.style.background = "#fff";
+      document.getElementById("mainContent").style.boxShadow = "none";
+      document.getElementById("mainContent").style.borderRadius = "0";
+    }
+
     async function sendMessage() {
       const inputElem = document.getElementById("userInput");
       const responseBox = document.getElementById("responseBox");
@@ -173,7 +184,7 @@
     }
   </script>
 
-  <!-- Optional: Load floating widget -->
+  <!-- Floating widget -->
   <script src="/widget.js"></script>
 </body>
 </html>
