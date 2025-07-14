@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -11,6 +12,9 @@ import json
 load_dotenv()
 
 app = FastAPI()
+
+# Gör static-mappen tillgänglig via /static
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # CORS: så widgeten kan bäddas in externt
 app.add_middleware(
