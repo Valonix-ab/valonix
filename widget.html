@@ -32,9 +32,9 @@
       margin-bottom: 16px;
     }
 
-    .widget-header span {
-      color: #ff5c00;
-      font-size: 20px;
+    .widget-header img {
+      width: 24px;
+      height: 24px;
     }
 
     .chat-scrollable {
@@ -132,15 +132,19 @@
     .chat-footer {
       padding-top: 12px;
       border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: center;
     }
 
     .chat-input {
       width: 100%;
+      max-width: 100%;
       padding: 12px;
       border-radius: 16px;
       border: 1px solid #ccc;
       font-size: 16px;
       outline: none;
+      box-sizing: border-box;
     }
 
     .chat-input:focus {
@@ -152,6 +156,7 @@
       border-radius: 12px;
       margin-bottom: 8px;
     }
+
     .product-card {
       margin-top: 8px;
       font-size: 14px;
@@ -161,7 +166,8 @@
 <body>
   <div class="widget-container">
     <div class="widget-header">
-      <span>✨</span> <div>Assistent</div>
+      <img src="598b8d21-8bd8-40d6-b333-f84ac7d776a2.png" alt="Logo" />
+      <div>Assistent</div>
     </div>
 
     <div class="chat-scrollable" id="scroll-container">
