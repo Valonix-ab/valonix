@@ -1,54 +1,76 @@
 (function () {
   const button = document.createElement("button");
-  button.innerText = "💬 Chatta med Valonix";
+  button.setAttribute("aria-label", "Chatta med Valonix");
+
+  // SVG med stilren chattbubbla + V i mitten
+  button.innerHTML = `
+    <svg width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="32" fill="#111"/>
+      <path d="M24 20L32 44L40 20H36L32 32L28 20H24Z" fill="white"/>
+    </svg>
+  `;
+
+  // Knappstil
   Object.assign(button.style, {
     position: "fixed",
     bottom: "20px",
     right: "20px",
     zIndex: "9999",
-    padding: "12px 18px",
-    backgroundColor: "#111",
-    color: "#fff",
+    padding: "0",
+    width: "64px",
+    height: "64px",
+    backgroundColor: "transparent",
     border: "none",
-    borderRadius: "30px",
+    borderRadius: "50%",
     cursor: "pointer",
-    fontSize: "1rem",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.25)",
   });
+
+  // Hover-effekt
+  button.addEventListener("mouseenter", () => {
+    button.style.transform = "scale(1.08)";
+    button.style.boxShadow = "0 10px 24px rgba(0, 0, 0, 0.35)";
+  });
+
+  button.addEventListener("mouseleave", () => {
+    button.style.transform = "scale(1)";
+    button.style.boxShadow = "0 6px 20px rgba(0, 0, 0, 0.25)";
+  });
+
   document.body.appendChild(button);
 
+  // Iframe
   let iframeOpen = false;
   const iframe = document.createElement("iframe");
   iframe.src = "/widget.html";
   iframe.setAttribute("loading", "lazy");
   iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
 
-  // Responsiv storlek baserat på skärm
   function updateIframeSize() {
     const isMobile = window.innerWidth <= 600;
     Object.assign(iframe.style, {
       position: "fixed",
-      bottom: "70px",
+      bottom: "80px",
       right: "20px",
       width: isMobile ? "90%" : "600px",
       height: isMobile ? "500px" : "700px",
       border: "1px solid #ccc",
       borderRadius: "12px",
-      boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+      boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
       zIndex: "9998",
-      display: "none",
+      display: iframeOpen ? "block" : "none",
       backgroundColor: "#fff",
     });
   }
 
-  // Init och på resize
   updateIframeSize();
   window.addEventListener("resize", updateIframeSize);
-
   document.body.appendChild(iframe);
 
+  // Toggle widget
   button.addEventListener("click", () => {
     iframeOpen = !iframeOpen;
-    iframe.style.display = iframeOpen ? "block" : "none";
+    updateIframeSize();
   });
 })();
