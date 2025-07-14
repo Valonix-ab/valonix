@@ -2,15 +2,20 @@
   const button = document.createElement("button");
   button.setAttribute("aria-label", "Chatta med Valonixxx");
 
-  // SVG med stilren chattbubbla + V i mitten
-  button.innerHTML = `
-    <svg width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="32" r="32" fill="#111"/>
-      <path d="M24 20L32 44L40 20H36L32 32L28 20H24Z" fill="white"/>
-    </svg>
-  `;
+  // Ikonbild från Render-länk
+  const img = document.createElement("img");
+  img.src = "https://valonix.onrender.com/logo.png"; // <-- Din Render-hostade ikonbild
+  img.alt = "Valonix logotyp";
+  Object.assign(img.style, {
+    width: "100%",
+    height: "100%",
+    objectFit: "contain",
+    borderRadius: "12px",
+  });
 
-  // Knappstil
+  button.appendChild(img);
+
+  // Knappstil – kvadratisk med rundade hörn
   Object.assign(button.style, {
     position: "fixed",
     bottom: "20px",
@@ -21,8 +26,9 @@
     height: "64px",
     backgroundColor: "transparent",
     border: "none",
-    borderRadius: "50%",
+    borderRadius: "12px", // 👈 kvadratisk form
     cursor: "pointer",
+    overflow: "hidden",
     transition: "transform 0.2s ease, box-shadow 0.2s ease",
     boxShadow: "0 6px 20px rgba(0, 0, 0, 0.25)",
   });
