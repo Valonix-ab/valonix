@@ -161,6 +161,30 @@
       margin-top: 8px;
       font-size: 14px;
     }
+
+    /* Typing loader */
+    .typing-loader {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .typing-loader span {
+      width: 6px;
+      height: 6px;
+      background: #000;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-loader span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-loader span:nth-child(2) { animation-delay: -0.16s; }
+    .typing-loader span:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -238,7 +262,14 @@
 
     async function handleUserInput(text) {
       addMessage(text, "user");
-      addMessage("...", "ai");
+
+      // Lägg till laddande bubbla
+      const loaderHTML = `
+        <div class="typing-loader">
+          <span style="margin-right: 4px;">Laddar</span>
+          <span></span><span></span><span></span>
+        </div>`;
+      addMessage(loaderHTML, "ai", true);
 
       try {
         const res = await fetch("https://valonix.onrender.com/chat", {
@@ -249,16 +280,12 @@
         const data = await res.json();
 
         const lastBubble = chatArea.querySelector(".ai-message:last-child");
-        if (lastBubble && lastBubble.textContent === "...") {
-          chatArea.removeChild(lastBubble);
-        }
+        if (lastBubble) chatArea.removeChild(lastBubble);
 
         addMessage(data.response || "Jag kunde inte hitta ett svar just nu.", "ai", true);
       } catch (err) {
         const lastBubble = chatArea.querySelector(".ai-message:last-child");
-        if (lastBubble && lastBubble.textContent === "...") {
-          chatArea.removeChild(lastBubble);
-        }
+        if (lastBubble) chatArea.removeChild(lastBubble);
 
         addMessage("Något gick fel. Försök igen senare.", "ai");
       }
