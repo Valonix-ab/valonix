@@ -1,32 +1,33 @@
 (function () {
   const button = document.createElement("button");
-  button.setAttribute("aria-label", "Chatta med Valonixxx");
+  button.setAttribute("aria-label", "Chatta med Valonix");
 
   // Ikonbild från Render-länk
   const img = document.createElement("img");
-  img.src = "https://valonix.onrender.com/static/logo.png"; // <-- Din Render-hostade ikonbild
+  img.src = "https://valonix.onrender.com/static/logo.png";
   img.alt = "Valonix logotyp";
   Object.assign(img.style, {
-    width: "100%",
-    height: "100%",
+    width: "60%",
+    height: "60%",
     objectFit: "contain",
-    borderRadius: "12px",
+    display: "block",
+    margin: "auto",
   });
 
   button.appendChild(img);
 
-  // Knappstil – kvadratisk med rundade hörn
+  // Knappstil – nu mindre och mer kompakt
   Object.assign(button.style, {
     position: "fixed",
     bottom: "20px",
     right: "20px",
     zIndex: "9999",
     padding: "0",
-    width: "64px",
-    height: "64px",
-    backgroundColor: "transparent",
+    width: "50px",
+    height: "50px",
+    backgroundColor: "#000",
     border: "none",
-    borderRadius: "12px", // 👈 kvadratisk form
+    borderRadius: "12px",
     cursor: "pointer",
     overflow: "hidden",
     transition: "transform 0.2s ease, box-shadow 0.2s ease",
