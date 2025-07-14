@@ -10,17 +10,17 @@
       background: #f9f9f9;
       margin: 0;
       padding: 0;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .widget-container {
       max-width: 700px;
       margin: 0 auto;
-      padding: 24px;
       display: flex;
       flex-direction: column;
       height: 100dvh;
       box-sizing: border-box;
+      padding: 24px;
     }
 
     .widget-header {
@@ -35,6 +35,13 @@
     .widget-header span {
       color: #ff5c00;
       font-size: 20px;
+    }
+
+    .chat-scrollable {
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
     }
 
     .intro-text {
@@ -93,8 +100,6 @@
     }
 
     #chat-area {
-      flex-grow: 1;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -125,7 +130,6 @@
     }
 
     .chat-footer {
-      margin-top: auto;
       padding-top: 12px;
       border-top: 1px solid #ddd;
     }
@@ -142,6 +146,16 @@
     .chat-input:focus {
       border-color: #888;
     }
+
+    .product-card img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .product-card {
+      margin-top: 8px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -150,23 +164,25 @@
       <span>✨</span> <div>Assistent</div>
     </div>
 
-    <div class="intro-text">Hej!<br>På vilket sätt kan jag hjälpa till idag?</div>
+    <div class="chat-scrollable" id="scroll-container">
+      <div class="intro-text">Hej!<br>På vilket sätt kan jag hjälpa till idag?</div>
 
-    <div class="subtext">
-      Har du en fråga om mode? Behöver du bra tips om sportkläder? Det finns mycket vi kan prata om.
-    </div>
-
-    <div class="suggestion-wrapper">
-      <div class="suggestion-label">✨ Förslag</div>
-      <div class="suggestions">
-        <div class="suggestion-bubble">Öppettider</div>
-        <div class="suggestion-bubble">Frågor om Jysk</div>
-        <div class="suggestion-bubble">Har ni sängar?</div>
-        <div class="suggestion-bubble">Leveransalternativ</div>
+      <div class="subtext">
+        Har du en fråga om mode? Behöver du bra tips om sportkläder? Det finns mycket vi kan prata om.
       </div>
-    </div>
 
-    <div id="chat-area"></div>
+      <div class="suggestion-wrapper">
+        <div class="suggestion-label">✨ Förslag</div>
+        <div class="suggestions">
+          <div class="suggestion-bubble">Öppettider</div>
+          <div class="suggestion-bubble">Frågor om Jysk</div>
+          <div class="suggestion-bubble">Har ni sängar?</div>
+          <div class="suggestion-bubble">Leveransalternativ</div>
+        </div>
+      </div>
+
+      <div id="chat-area"></div>
+    </div>
 
     <div class="chat-footer">
       <input class="chat-input" id="chat-input" type="text" placeholder="Skriv in meddelande" />
@@ -176,14 +192,19 @@
   <script>
     const chatInput = document.getElementById("chat-input");
     const chatArea = document.getElementById("chat-area");
+    const scrollContainer = document.getElementById("scroll-container");
     const suggestions = document.querySelectorAll(".suggestion-bubble");
 
-    function addMessage(text, from = "user") {
+    function addMessage(content, from = "user", isHTML = false) {
       const msg = document.createElement("div");
       msg.className = "message-bubble " + (from === "user" ? "user-message" : "ai-message");
-      msg.textContent = text;
+      if (isHTML) {
+        msg.innerHTML = content;
+      } else {
+        msg.textContent = content;
+      }
       chatArea.appendChild(msg);
-      chatArea.scrollTop = chatArea.scrollHeight;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
 
     async function handleUserInput(text) {
@@ -203,7 +224,7 @@
           chatArea.removeChild(lastBubble);
         }
 
-        addMessage(data.response || "Jag kunde inte hitta ett svar just nu.", "ai");
+        addMessage(data.response || "Jag kunde inte hitta ett svar just nu.", "ai", true);
       } catch (err) {
         const lastBubble = chatArea.querySelector(".ai-message:last-child");
         if (lastBubble && lastBubble.textContent === "...") {
