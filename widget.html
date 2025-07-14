@@ -164,9 +164,10 @@
 
     /* Typing loader */
     .typing-loader {
-      display: inline-flex;
-      align-items: center;
+      display: flex;
       gap: 6px;
+      justify-content: flex-start;
+      align-items: center;
     }
 
     .typing-loader span {
@@ -229,7 +230,6 @@
       const msg = document.createElement("div");
       msg.className = "message-bubble " + (from === "user" ? "user-message" : "ai-message");
 
-      // Speciallayout för öppettider
       if (from === "ai" && typeof content === "string" && content.toLowerCase().includes("öppettider")) {
         msg.innerHTML = `
           <div style="
@@ -263,10 +263,9 @@
     async function handleUserInput(text) {
       addMessage(text, "user");
 
-      // Lägg till laddande bubbla
+      // Lägg till bara prickar som loader
       const loaderHTML = `
         <div class="typing-loader">
-          <span style="margin-right: 4px;">Laddar</span>
           <span></span><span></span><span></span>
         </div>`;
       addMessage(loaderHTML, "ai", true);
