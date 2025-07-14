@@ -1,33 +1,34 @@
 (function () {
   const button = document.createElement("button");
-  button.setAttribute("aria-label", "Chatta med Valonix");
+  button.setAttribute("aria-label", "Chatta med Valonixxx");
 
-  // Ikonbild – nu större (80% av knappen)
+  // Ikonbild från Render-länk
   const img = document.createElement("img");
-  img.src = "https://valonix.onrender.com/static/logo.png";
+  img.src = "https://valonix.onrender.com/static/logo.png"; // <-- Din Render-hostade ikonbild
   img.alt = "Valonix logotyp";
   Object.assign(img.style, {
-    width: "80%",
-    height: "80%",
+    width: "120%",         // Gör bilden lite större än knappen
+    height: "120%",
     objectFit: "contain",
-    display: "block",
-    margin: "auto",
+    borderRadius: "12px",
+    marginLeft: "-4px",     // Flytta lite åt vänster
+    marginTop: "-2px",      // Justera uppåt lite också
   });
 
   button.appendChild(img);
 
-  // Knappstil – oförändrad, 50x50px
+  // Knappstil – kvadratisk med rundade hörn
   Object.assign(button.style, {
     position: "fixed",
     bottom: "20px",
     right: "20px",
     zIndex: "9999",
     padding: "0",
-    width: "50px",
-    height: "50px",
-    backgroundColor: "#000",
+    width: "64px",
+    height: "64px",
+    backgroundColor: "transparent",
     border: "none",
-    borderRadius: "12px",
+    borderRadius: "12px", // 👈 kvadratisk form
     cursor: "pointer",
     overflow: "hidden",
     transition: "transform 0.2s ease, box-shadow 0.2s ease",
