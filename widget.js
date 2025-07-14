@@ -2,13 +2,13 @@
   const button = document.createElement("button");
   button.setAttribute("aria-label", "Chatta med Valonix");
 
-  // Ikonbild från Render-länk
+  // Ikonbild – nu större (80% av knappen)
   const img = document.createElement("img");
   img.src = "https://valonix.onrender.com/static/logo.png";
   img.alt = "Valonix logotyp";
   Object.assign(img.style, {
-    width: "60%",
-    height: "60%",
+    width: "80%",
+    height: "80%",
     objectFit: "contain",
     display: "block",
     margin: "auto",
@@ -16,7 +16,7 @@
 
   button.appendChild(img);
 
-  // Knappstil – nu mindre och mer kompakt
+  // Knappstil – oförändrad, 50x50px
   Object.assign(button.style, {
     position: "fixed",
     bottom: "20px",
