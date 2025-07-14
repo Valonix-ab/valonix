@@ -4,7 +4,7 @@
 
   // Ikonbild från Render-länk
   const img = document.createElement("img");
-  img.src = "https://valonix.onrender.com/logo.png"; // <-- Din Render-hostade ikonbild
+  img.src = "https://valonix.onrender.com/static/logo.png"; // <-- Din Render-hostade ikonbild
   img.alt = "Valonix logotyp";
   Object.assign(img.style, {
     width: "100%",
