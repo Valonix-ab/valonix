@@ -204,11 +204,34 @@
     function addMessage(content, from = "user", isHTML = false) {
       const msg = document.createElement("div");
       msg.className = "message-bubble " + (from === "user" ? "user-message" : "ai-message");
+
+      // Speciallayout för öppettider
+      if (from === "ai" && typeof content === "string" && content.toLowerCase().includes("öppettider")) {
+        msg.innerHTML = `
+          <div style="
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 15px;
+            color: #000;
+            line-height: 1.6;
+          ">
+            <strong>📅 Öppettider</strong><br/>
+            ${content.replace(/\n/g, "<br/>")}
+          </div>
+        `;
+        chatArea.appendChild(msg);
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+        return;
+      }
+
       if (isHTML) {
         msg.innerHTML = content;
       } else {
         msg.textContent = content;
       }
+
       chatArea.appendChild(msg);
       scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
