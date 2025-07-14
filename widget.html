@@ -2,249 +2,200 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Valonix Widget</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Assistent</title>
   <style>
-    * {
+    body {
+      font-family: "Inter", sans-serif;
+      background: #f9f9f9;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #fff;
-      color: #111;
-      height: 100vh;
+    .widget-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .widget-header {
       display: flex;
-      flex-direction: column;
-      padding: 1rem;
-    }
-
-    @media (max-height: 700px) {
-      body {
-        padding-bottom: 60px;
-      }
-    }
-
-    h2 {
-      font-size: 1.1rem;
+      align-items: center;
+      gap: 8px;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      text-align: center;
+      font-size: 18px;
+      margin-bottom: 16px;
     }
 
-    .preview-questions {
+    .widget-header span {
+      color: #ff5c00;
+      font-size: 20px;
+    }
+
+    .intro-text {
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .subtext {
+      background: #eeeeee;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 16px;
+      color: #222;
+      margin-bottom: 24px;
+      max-width: 80%;
+    }
+
+    .suggestion-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: column;
+      align-items: flex-end;
+      margin-bottom: 32px;
+    }
+
+    .suggestion-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #777;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .suggestions {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 0.5rem;
+      justify-content: flex-end;
+      gap: 10px;
     }
 
-    .preview-questions button {
-      background: #eee;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
+    .suggestion-bubble {
+      border: 1px solid #ccc;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 15px;
+      background: white;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .response-box {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: #fff;
-      margin-bottom: 0.8rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      font-size: 0.85rem;
+    .suggestion-bubble:hover {
+      background: #f0f0f0;
     }
 
-    .bubble {
-      max-width: 75%;
-      padding: 0.6rem 0.9rem;
+    .message-bubble {
+      max-width: fit-content;
+      padding: 12px 16px;
       border-radius: 16px;
-      line-height: 1.4;
-      white-space: pre-wrap;
+      font-size: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
       word-wrap: break-word;
+      line-height: 1.4;
+      clear: both;
     }
 
-    .ai {
-      background: #f1f1f1;
-      align-self: flex-start;
-      border-top-left-radius: 0;
+    .ai-message {
+      background: #d4d4d4;
+      color: #000;
+      float: left;
     }
 
-    .user {
-      background: #111;
+    .user-message {
+      background: #000;
       color: #fff;
-      align-self: flex-end;
-      border-top-right-radius: 0;
+      float: right;
     }
 
-    .chat-container {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
+    .chat-footer {
+      margin-top: 24px;
+      clear: both;
     }
 
-    #userInput {
-      flex: 1;
-      padding: 0.6rem 1rem;
-      border: 1.5px solid #ccc;
-      border-radius: 10px;
-      font-size: 0.95rem;
+    .chat-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid #ccc;
+      font-size: 16px;
       outline: none;
     }
 
-    .send-button {
-      background: #111;
-      color: white;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .product-card {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 8px;
-      background: #f9f9f9;
-    }
-
-    .product-card img {
-      width: 60px;
-      height: auto;
-      border-radius: 6px;
-    }
-
-    .product-card h3 {
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    .product-card p {
-      margin: 2px 0;
-      font-size: 0.75rem;
-    }
-
-    .product-card a {
-      font-size: 0.75rem;
-      color: #0077cc;
-      text-decoration: none;
-    }
-
-    .product-card a:hover {
-      text-decoration: underline;
-    }
-
-    .dot {
-      animation: blink 1s infinite ease-in-out;
-      display: inline-block;
-    }
-
-    .dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes blink {
-      0%, 20% { opacity: 0.2; }
-      50% { opacity: 1; }
-      100% { opacity: 0.2; }
+    .chat-input:focus {
+      border-color: #888;
     }
   </style>
 </head>
 <body>
-  <h2>Valonix Assistent 🤖</h2>
+  <div class="widget-container">
+    <div class="widget-header">
+      <span>✨</span> <div>Assistent</div>
+    </div>
 
-  <div class="preview-questions">
-    <button onclick="sendPreset('Vad har ni för öppettider?')">Öppettider</button>
-    <button onclick="sendPreset('Hur returnerar jag en vara?')">Returpolicy</button>
-    <button onclick="sendPreset('Har ni studentrabatt?')">Studentrabatt</button>
-  </div>
+    <div class="intro-text">Hej!<br>På vilket sätt kan jag hjälpa till idag?</div>
 
-  <div class="response-box" id="responseBox"></div>
+    <div class="subtext">
+      Har du en fråga om mode? Behöver du bra tips om sportkläder? Det finns mycket vi kan prata om.
+    </div>
 
-  <div class="chat-container">
-    <input type="text" id="userInput" placeholder="Skriv ett meddelande..." />
-    <button class="send-button" onclick="sendMessage()">Skicka</button>
+    <div class="suggestion-wrapper">
+      <div class="suggestion-label">✨ Förslag</div>
+      <div class="suggestions">
+        <div class="suggestion-bubble">Öppettider</div>
+        <div class="suggestion-bubble">Frågor om Jysk</div>
+        <div class="suggestion-bubble">Har ni sängar?</div>
+        <div class="suggestion-bubble">Leveransalternativ</div>
+      </div>
+    </div>
+
+    <div id="chat-area">
+      <!-- Dynamiska meddelanden hamnar här -->
+    </div>
+
+    <div class="chat-footer">
+      <input class="chat-input" id="chat-input" type="text" placeholder="Skriv in meddelande" />
+    </div>
   </div>
 
   <script>
-    const responseBox = document.getElementById("responseBox");
+    const chatInput = document.getElementById("chat-input");
+    const chatArea = document.getElementById("chat-area");
+    const bubbles = document.querySelectorAll(".suggestion-bubble");
 
-    function appendMessage(text, sender) {
-      const div = document.createElement("div");
-      div.className = `bubble ${sender}`;
-      if (sender === "ai") {
-        div.innerHTML = text;
-      } else {
-        div.innerText = text;
-      }
-      responseBox.appendChild(div);
-      responseBox.scrollTop = responseBox.scrollHeight;
+    function addMessage(text, from = "user") {
+      const msg = document.createElement("div");
+      msg.className = "message-bubble " + (from === "user" ? "user-message" : "ai-message");
+      msg.textContent = text;
+      chatArea.appendChild(msg);
+      chatArea.scrollTop = chatArea.scrollHeight;
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      appendMessage("Hej! 👋 Hur kan jag hjälpa dig?", "ai");
+    chatInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && chatInput.value.trim() !== "") {
+        const userText = chatInput.value.trim();
+        addMessage(userText, "user");
+        chatInput.value = "";
 
-      // Enter-tangent
-      document.getElementById("userInput").addEventListener("keydown", (e) => {
-        if (e.key === "Enter") sendMessage();
-      });
+        setTimeout(() => {
+          addMessage("Tack för ditt meddelande: \"" + userText + "\". Jag återkommer med ett svar!", "ai");
+        }, 600);
+      }
     });
 
-    async function sendMessage() {
-      const inputElem = document.getElementById("userInput");
-      const message = inputElem.value.trim();
-      if (!message) return;
-
-      appendMessage(message, "user");
-
-      const loadingBubble = document.createElement("div");
-      loadingBubble.className = "bubble ai";
-      loadingBubble.innerHTML = `<span style="opacity: 0.6;">Tänker<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>`;
-      responseBox.appendChild(loadingBubble);
-      responseBox.scrollTop = responseBox.scrollHeight;
-
-      inputElem.value = "";
-      inputElem.focus();
-
-      try {
-        const res = await fetch("https://valonix.onrender.com/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message })
-        });
-
-        const data = await res.json();
-        loadingBubble.remove();
-        appendMessage(data.response || "Inget svar mottaget.", "ai");
-      } catch (err) {
-        loadingBubble.remove();
-        appendMessage("Fel: " + err.message, "ai");
-      }
-    }
-
-    function sendPreset(text) {
-      document.getElementById("userInput").value = text;
-      sendMessage();
-    }
+    bubbles.forEach(bubble => {
+      bubble.addEventListener("click", () => {
+        const text = bubble.textContent;
+        addMessage(text, "user");
+        setTimeout(() => {
+          addMessage("Tack för ditt meddelande: \"" + text + "\". Jag återkommer med ett svar!", "ai");
+        }, 600);
+      });
+    });
   </script>
 </body>
 </html>
