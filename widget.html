@@ -22,6 +22,12 @@
       padding: 1rem;
     }
 
+    @media (max-height: 700px) {
+      body {
+        padding-bottom: 60px;
+      }
+    }
+
     h2 {
       font-size: 1.1rem;
       font-weight: 600;
@@ -107,7 +113,6 @@
       cursor: pointer;
     }
 
-    /* Kompakt produktkort */
     .product-card {
       display: flex;
       align-items: flex-start;
@@ -142,6 +147,25 @@
 
     .product-card a:hover {
       text-decoration: underline;
+    }
+
+    .dot {
+      animation: blink 1s infinite ease-in-out;
+      display: inline-block;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 20% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
     }
   </style>
 </head>
@@ -178,6 +202,11 @@
 
     window.addEventListener("DOMContentLoaded", () => {
       appendMessage("Hej! 👋 Hur kan jag hjälpa dig?", "ai");
+
+      // Enter-tangent
+      document.getElementById("userInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
     });
 
     async function sendMessage() {
@@ -186,22 +215,28 @@
       if (!message) return;
 
       appendMessage(message, "user");
-      appendMessage("Tänker...", "ai");
+
+      const loadingBubble = document.createElement("div");
+      loadingBubble.className = "bubble ai";
+      loadingBubble.innerHTML = `<span style="opacity: 0.6;">Tänker<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>`;
+      responseBox.appendChild(loadingBubble);
+      responseBox.scrollTop = responseBox.scrollHeight;
 
       inputElem.value = "";
       inputElem.focus();
 
       try {
-        const res = await fetch("/chat", {
+        const res = await fetch("https://valonix.onrender.com/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message })
         });
+
         const data = await res.json();
-        const lastBubble = responseBox.querySelector(".bubble.ai:last-of-type");
-        if (lastBubble) lastBubble.remove();
+        loadingBubble.remove();
         appendMessage(data.response || "Inget svar mottaget.", "ai");
       } catch (err) {
+        loadingBubble.remove();
         appendMessage("Fel: " + err.message, "ai");
       }
     }
