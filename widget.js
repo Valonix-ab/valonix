@@ -1,6 +1,6 @@
 (function () {
   const button = document.createElement("button");
-  button.setAttribute("aria-label", "Chatta med Valonix");
+  button.setAttribute("aria-label", "Chatta med Valonixxx");
 
   // SVG med stilren chattbubbla + V i mitten
   button.innerHTML = `
