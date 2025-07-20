@@ -1,3 +1,5 @@
+<!-- KOMPLETT WIDGET.HTML MED FÖRBÄTTRAD AI-RESPONS -->
+
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -5,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Assistent</title>
   <style>
+    /* --- Samma styling som du hade --- */
+    /* --- STYLING INKLUSIVE .product-carousel och .product-card --- */
     body {
       font-family: "Inter", sans-serif;
       background: #f9f9f9;
@@ -279,31 +283,13 @@
     const scrollContainer = document.getElementById("scroll-container");
     const suggestions = document.querySelectorAll(".suggestion-bubble");
 
-    function addMessage(content, from = "user", isHTML = false) {
+    function addMessage(content, from = "user", isHTML = false, isProductGroup = false) {
       const msg = document.createElement("div");
       msg.className = "message-bubble " + (from === "user" ? "user-message" : "ai-message");
 
-      if (from === "ai" && typeof content === "string" && content.toLowerCase().includes("öppettider")) {
-        msg.innerHTML = `
-          <div style="
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 15px;
-            color: #000;
-            line-height: 1.6;
-          ">
-            <strong>📅 Öppettider</strong><br/>
-            ${content.replace(/\n/g, "<br/>")}
-          </div>
-        `;
-        chatArea.appendChild(msg);
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-        return;
-      }
-
-      if (isHTML) {
+      if (isProductGroup) {
+        msg.innerHTML = `<div class="product-carousel">${content}</div>`;
+      } else if (isHTML) {
         msg.innerHTML = content;
       } else {
         msg.textContent = content;
@@ -333,7 +319,19 @@
         const lastBubble = chatArea.querySelector(".ai-message:last-child");
         if (lastBubble) chatArea.removeChild(lastBubble);
 
-        addMessage(data.response || "Jag kunde inte hitta ett svar just nu.", "ai", true);
+        const responseHTML = data.response || "";
+        const productRegex = /<div class="product-card">[\s\S]*?<\/div>/g;
+        const productMatches = responseHTML.match(productRegex);
+
+        if (productMatches && productMatches.length > 0) {
+          const introText = responseHTML.split(productMatches[0])[0].trim();
+          if (introText) addMessage(introText, "ai", true);
+
+          const allProductsHTML = productMatches.join("");
+          addMessage(allProductsHTML, "ai", true, true);
+        } else {
+          addMessage(responseHTML, "ai", true);
+        }
       } catch (err) {
         const lastBubble = chatArea.querySelector(".ai-message:last-child");
         if (lastBubble) chatArea.removeChild(lastBubble);
