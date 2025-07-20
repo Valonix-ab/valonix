@@ -1,11 +1,49 @@
 [
   {
-    "namn": "TYSSA PC60",
-    "kategori": "Säng",
-    "beskrivning": "Kontinentalsäng 160x200cm TYSSA PC60 svart-08 HR",
-    "pris": "2900",
+    "namn": "FERRAGAMO BELT",
+    "kategori": "Belt",
+    "beskrivning": "Belt from Ferragamo",
+    "pris": "600",
     "lager": 25,
-    "url": "https://jysk.se/sovrum/kontinentalsangar/kontinentalsang-160x200cm-tyssa-pc60-svart-08-hr",
-    "bild": "https://cdn3.jysk.com/getimage/wd3.medium/252017"
+    "url": "https://snowbox.site/product/ferragamo-belt-9/",
+    "bild": "https://snowbox.site/wp-content/uploads/2025/06/FERRAGAMO-BELT-6-1.png"
+  },
+  {
+    "namn": "PRADA BELT",
+    "kategori": "Belt",
+    "beskrivning": "Belt from Prada",
+    "pris": "700",
+    "lager": 25,
+    "url": "https://snowbox.site/product/prada-belt-2/",
+    "bild": "https://snowbox.site/wp-content/uploads/2025/04/18318179_39167905_1000.webp"
+  },
+  {
+    "namn": "Hermes Belt Reversible 38MM",
+    "kategori": "Belt",
+    "beskrivning": "Belt from Hermes",
+    "pris": "800",
+    "lager": 25,
+    "url": "https://snowbox.site/product/hermes-belt-reversible-38mm-2/",
+    "bild": "https://snowbox.site/wp-content/uploads/2025/04/constance-belt-buckle-reversible-leather-strap-38mm-beltkits-38-075387CAAF_composite_4-081106CH89_composite_3-0-0-800-800_g.webp"
+  }, 
+  {
+    "namn": "Hermes Belt Reversible 38MM",
+    "kategori": "Belt",
+    "beskrivning": "Belt from Hermes",
+    "pris": "800",
+    "lager": 25,
+    "url": "https://snowbox.site/product/hermes-belt-reversible-38mm-2/",
+    "bild": "https://snowbox.site/wp-content/uploads/2025/04/constance-belt-buckle-reversible-leather-strap-38mm-beltkits-38-075387CAAF_composite_4-081106CH89_composite_3-0-0-800-800_g.webp"
+  },
+  {
+    "namn": "Fendi FF Double Loop Reversible Leather Belt",
+    "kategori": "Belt",
+    "beskrivning": "Belt from Fendi",
+    "pris": "1000",
+    "lager": 25,
+    "url": "https://snowbox.site/product/fendi-ff-double-loop-reversible-leather-belt/",
+    "bild": "https://snowbox.site/wp-content/uploads/2024/11/image_316d0e34-41ab-431c-9a99-4998541b2fe5.jpg"
   }
+  
+  
 ]

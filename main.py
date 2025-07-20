@@ -63,21 +63,19 @@ def format_product_knowledge(products):
 
 product_knowledge = format_product_knowledge(products)
 
-# Extra info (öppettider, kundtjänst osv)
+# Företagsinfo för Snowbox
 business_info = """
-Öppettider (generella):
-- Vardagar: 10:00–19:00
-- Lördagar: 10:00–17:00
-- Söndagar: 11:00–16:00
+Frakt & Leverans:
+- Vi erbjuder snabb leverans inom Sverige.
+- Fri frakt på ordrar över 999 SEK.
+- Spåra dina beställningar via ditt konto på snowbox.site.
 
-Kundtjänst:
-- Telefon: 0770–457 457
-- E-post: kundservice@jysk.se
-- Chatt: Öppen vardagar 9–17
+Support:
+- E-post: support@snowbox.site
+- Chatt: Tillgänglig vardagar 09–17
 
-Butiksinformation:
-- Du kan hitta närmaste butik på: https://jysk.se/stores
-- Vi erbjuder både hemleverans och avhämtning i butik.
+Mer info & returpolicy:
+- https://snowbox.site/pages/faq
 """
 
 # OpenAI-klient
@@ -91,7 +89,7 @@ async def chat(chat_request: ChatRequest):
             messages=[
                 {
                     "role": "system",
-                    "content": f"""Du är en AI-assistent för JYSK Sverige.
+                    "content": f"""Du är en AI-assistent för Snowbox – en svensk e-handelsbutik som säljer exklusiva modeprodukter.
 
 När du rekommenderar en produkt, använd följande HTML-format så att det visas snyggt i en chattwidget:
 
@@ -113,7 +111,7 @@ Svaren ska vara korta, vänliga och professionella.
 Tillgängliga produkter:
 {product_knowledge}
 
-Allmän företagsinformation:
+Företagsinformation:
 {business_info}
 
 Om du inte vet svaret – säg det istället för att gissa.
